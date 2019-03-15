@@ -6,4 +6,8 @@ enum class TicTacToeSquare(val symbol: String, val isPlayer: Boolean) {
     O("O", true),
 
     EMPTY(" ", false);
+
+    fun isNotPlayer(): Boolean {
+        return !isPlayer
+    }
 }

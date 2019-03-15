@@ -4,7 +4,7 @@ import com.intelligenttictactoe.demo.TicTacToeSquare.EMPTY
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
-class TicTacToeBoard(val board: List<List<TicTacToeSquare>> = createEmpty()) {
+class TicTacToeBoard(private val board: List<List<TicTacToeSquare>> = createEmpty()) {
 
     private companion object {
         @JvmStatic
@@ -14,6 +14,10 @@ class TicTacToeBoard(val board: List<List<TicTacToeSquare>> = createEmpty()) {
                     listOf(EMPTY, EMPTY, EMPTY),
                     listOf(EMPTY, EMPTY, EMPTY))
         }
+    }
+
+    fun play(player: TicTacToeSquare, position: Int): TicTacToeBoard {
+        return createNew(player, position % 3, position / 3)
     }
 
     fun play(player: TicTacToeSquare, x: Int, y: Int): TicTacToeBoard {
@@ -41,6 +45,28 @@ class TicTacToeBoard(val board: List<List<TicTacToeSquare>> = createEmpty()) {
         return IntStream
                 .range(0, 9)
                 .noneMatch { board[it % 3][it / 3] == EMPTY }
+    }
+
+    fun getWinner(): TicTacToeSquare {
+        // Verify diagonals
+        val center = board[1][1]
+        if (center != EMPTY &&
+                (center == board[0][0] && center == board[2][2]
+                        || center == board[0][2] && center == board[2][0])) {
+            return center
+        }
+
+        // Verify verticals and horizontals
+        for (i in 0 until 3) {
+            val pivot = board[i][i]
+            if (pivot != EMPTY
+                    && (pivot == board[i][0] && pivot == board[i][1] && pivot == board[i][2]
+                            || pivot == board[0][i] && pivot == board[1][i] && pivot == board[2][i])) {
+                return pivot
+            }
+        }
+
+        return EMPTY
     }
 
     private fun createNew(player: TicTacToeSquare, x: Int, y: Int): TicTacToeBoard {

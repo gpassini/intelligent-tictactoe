@@ -7,7 +7,7 @@ import javax.validation.constraints.Max
 import javax.validation.constraints.Min
 
 @ShellComponent
-class TicTacToe @Autowired constructor(
+class TicTacToeShell @Autowired constructor(
         private val ticTacToeService: TicTacToeService
 ) {
     @ShellMethod(value = "Choose a position to play (0 to 8).", key = ["play", "p"])
@@ -25,6 +25,12 @@ class TicTacToe @Autowired constructor(
     @ShellMethod(value = "Starts a new game", key = ["start", "s"])
     fun start(): String {
         ticTacToeService.resetGame()
+        return ticTacToeService.print()
+    }
+
+    @ShellMethod(value = "Plays using the minimax strategy", key = ["minimax", "mm", "m"])
+    fun minimax(): String {
+        ticTacToeService.playMinimax()
         return ticTacToeService.print()
     }
 }
