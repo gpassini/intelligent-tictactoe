@@ -4,6 +4,9 @@ import com.intelligenttictactoe.demo.TicTacToeSquare.O
 import com.intelligenttictactoe.demo.TicTacToeSquare.X
 import org.springframework.stereotype.Service
 
+/**
+ * Implementation of the Minimax Algorithm applied to TicTacToe.
+ */
 @Service
 class TicTacToeMinimaxPlayer {
 

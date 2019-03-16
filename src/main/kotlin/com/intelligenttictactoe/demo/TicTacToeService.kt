@@ -6,14 +6,34 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 
+/**
+ * Game logic implementation.
+ */
 @Service
-class TicTacToeService @Autowired constructor(private val minimaxPlayer: TicTacToeMinimaxPlayer) {
+class TicTacToeService @Autowired constructor(
+        /**
+         * Minimax algorithm player.
+         */
+        private val minimaxPlayer: TicTacToeMinimaxPlayer) {
 
+    /**
+     * `true` if it is the player X`s turn.
+     */
     private var isXPlayerTurn = true
+
+    /**
+     * `true` if the game is over.
+     */
     private var isGameOver = false
 
+    /**
+     * Ordered list of all past board states, the last element being the its current state.
+     */
     private val history = mutableListOf(TicTacToeBoard())
 
+    /**
+     * Plays at a given position (from 0 to 8).
+     */
     fun play(position: Int) {
         if (isGameOver) {
             System.out.println("The game is over.")
@@ -32,10 +52,16 @@ class TicTacToeService @Autowired constructor(private val minimaxPlayer: TicTacT
         isXPlayerTurn = isXPlayerTurn.not()
     }
 
+    /**
+     * Plays at a random position.
+     */
     fun playRandom() {
         play(getAvailableRandomPosition())
     }
 
+    /**
+     * Plays at a position chosen by the minimax player.
+     */
     fun playMinimax() {
         if (isGameOver) {
             System.out.println("The game is over.")
@@ -47,6 +73,9 @@ class TicTacToeService @Autowired constructor(private val minimaxPlayer: TicTacT
         return play(minimaxPlayer.play(currentBoard, currentPlayer))
     }
 
+    /**
+     * Restarts the game.
+     */
     fun resetGame() {
         history.clear()
         history.add(TicTacToeBoard())
@@ -54,10 +83,16 @@ class TicTacToeService @Autowired constructor(private val minimaxPlayer: TicTacT
         isGameOver = false
     }
 
+    /**
+     * Returns a representation of the current board state.
+     */
     fun print(): String {
         return history.last().toString()
     }
 
+    /**
+     * Returns a random available position (from 0 to 8) from the current board.
+     */
     private fun getAvailableRandomPosition(): Int {
         val availablePositions = history.last().getAvailablePositions()
         if (availablePositions.isEmpty()) {
@@ -67,6 +102,9 @@ class TicTacToeService @Autowired constructor(private val minimaxPlayer: TicTacT
         return availablePositions[0]
     }
 
+    /**
+     * Returns `true` if the game is over. Whether a player won, or its a draw.
+     */
     private fun verifyEndConditions(): Boolean {
         val board = history.last()
 

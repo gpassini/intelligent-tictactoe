@@ -4,9 +4,23 @@ import com.intelligenttictactoe.demo.TicTacToeSquare.EMPTY
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
-class TicTacToeBoard(private val board: List<List<TicTacToeSquare>> = createEmpty()) {
-
+/**
+ * Representation of a board state.
+ *
+ * It also offers some utility functions to verify and interact with the board.
+ *
+ * This class is immutable. When a new position is played, a new board is created instead of modifying the current one.
+ */
+class TicTacToeBoard(
+        /**
+         * Representation of the board as a 3x3 matrix.
+         */
+        private val board: List<List<TicTacToeSquare>> = createEmpty()
+) {
     private companion object {
+        /**
+         * Creates an empty board.
+         */
         @JvmStatic
         private fun createEmpty(): List<List<TicTacToeSquare>> {
             return listOf(
@@ -16,10 +30,16 @@ class TicTacToeBoard(private val board: List<List<TicTacToeSquare>> = createEmpt
         }
     }
 
+    /**
+     * Plays a given player's symbol in a given position (from 0 to 8), returning a new board with the result.
+     */
     fun play(player: TicTacToeSquare, position: Int): TicTacToeBoard {
-        return createNew(player, position % 3, position / 3)
+        return play(player, position % 3, position / 3)
     }
 
+    /**
+     * Plays a given player's symbol in a given position (x and y from 0 to 2), returning a new board with the result.
+     */
     fun play(player: TicTacToeSquare, x: Int, y: Int): TicTacToeBoard {
         if (!player.isPlayer) {
             throw IllegalArgumentException("$player is not a player.")
@@ -33,6 +53,9 @@ class TicTacToeBoard(private val board: List<List<TicTacToeSquare>> = createEmpt
         return createNew(player, x, y)
     }
 
+    /**
+     * Returns this boards available positions (from 0 to 8).
+     */
     fun getAvailablePositions(): List<Int> {
         return IntStream
                 .range(0, 9)
@@ -41,12 +64,18 @@ class TicTacToeBoard(private val board: List<List<TicTacToeSquare>> = createEmpt
                 .collect(Collectors.toList())
     }
 
+    /**
+     * Returns `true` if the board is full.
+     */
     fun isFull(): Boolean {
         return IntStream
                 .range(0, 9)
                 .noneMatch { board[it % 3][it / 3] == EMPTY }
     }
 
+    /**
+     * Returns the winner of the game, if any. Otherwise returns [TicTacToeSquare.EMPTY].
+     */
     fun getWinner(): TicTacToeSquare {
         // Verify diagonals
         val center = board[1][1]
@@ -69,6 +98,9 @@ class TicTacToeBoard(private val board: List<List<TicTacToeSquare>> = createEmpt
         return EMPTY
     }
 
+    /**
+     * Creates a new board from the result of playing the given player's symbol, at the given position (x and y from 0 to 2) on this board.
+     */
     private fun createNew(player: TicTacToeSquare, x: Int, y: Int): TicTacToeBoard {
         val newTempBoard = mutableListOf<List<TicTacToeSquare>>()
         for (i in 0 until 3) {
@@ -84,6 +116,9 @@ class TicTacToeBoard(private val board: List<List<TicTacToeSquare>> = createEmpt
         return TicTacToeBoard(newBoard)
     }
 
+    /**
+     * Returns a representation of the this board.
+     */
     override fun toString(): String {
         return "| ${board[0][0].symbol} |  ${board[1][0].symbol} |  ${board[2][0].symbol} |\n" +
                 "| ${board[0][1].symbol} |  ${board[1][1].symbol} |  ${board[2][1].symbol} |\n" +
