@@ -1,10 +1,17 @@
 language: java
+install: true
 
-# Execution permission
+jdk:
+  - oraclejdk8
+
+script:
+  - ./gradlew build --scan -s
+
 before_install:
+  # Gradle execution permission
   - chmod +x gradlew
 
-# Gradle dependency caching particularity
+# Gradle dependency caching
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

@@ -2,6 +2,7 @@ package com.intelligenttictactoe.demo
 
 import com.intelligenttictactoe.demo.TicTacToeSquare.O
 import com.intelligenttictactoe.demo.TicTacToeSquare.X
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
@@ -14,8 +15,11 @@ class TicTacToeService @Autowired constructor(
         /**
          * Minimax algorithm player.
          */
-        private val minimaxPlayer: TicTacToeMinimaxPlayer) {
-
+        private val minimaxPlayer: TicTacToeMinimaxPlayer
+) {
+    private companion object {
+        private val LOG = LoggerFactory.getLogger(TicTacToeService::class.java)
+    }
     /**
      * `true` if it is the player X`s turn.
      */
@@ -36,7 +40,8 @@ class TicTacToeService @Autowired constructor(
      */
     fun play(position: Int) {
         if (isGameOver) {
-            System.out.println("The game is over.")
+            LOG.info("The game is over.")
+//            System.out.println("The game is over.")
             return
         }
 
