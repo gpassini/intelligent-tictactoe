@@ -1,5 +1,9 @@
 language: java
 
+# Execution permission
+before_install:
+  - chmod +x gradlew
+
 # Gradle dependency caching particularity
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
