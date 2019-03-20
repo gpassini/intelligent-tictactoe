@@ -59,4 +59,18 @@ class TicTacToeShell @Autowired constructor(
         ticTacToeService.playMinimax()
         return ticTacToeService.print()
     }
+
+    /**
+     * Plays at a position chosen by a minimax player.
+     */
+    @ShellMethod(value = "Plays using the alphabeta pruning strategy", key = ["alphabeta", "a"])
+    fun alphabeta(): String {
+        ticTacToeService.playAlphabeta()
+        return ticTacToeService.print()
+    }
+
+    @ShellMethod(value = "Simulate n games", key = ["simulate", "x"])
+    fun simulate(@Min(1) gamesNumber: Int): String {
+        return ticTacToeService.simulate(gamesNumber)
+    }
 }
