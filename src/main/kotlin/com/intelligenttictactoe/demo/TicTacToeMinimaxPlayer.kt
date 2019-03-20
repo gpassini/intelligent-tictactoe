@@ -16,29 +16,30 @@ class TicTacToeMinimaxPlayer {
         const val DRAW = 0
     }
 
-    fun play(board: TicTacToeBoard, symbol: TicTacToeSquare): Int {
+    fun play(board: TicTacToeBoard, symbol: TicTacToeSquare, pruning: Boolean): Int {
         val availablePositions = board.getAvailablePositions()
         if (availablePositions.isEmpty()) {
             throw IllegalStateException("The game is already over.")
         }
-        return availablePositions
-                .map { Pair(it, minimax(board.play(symbol, it), symbol, false)) }
-                .maxBy { it.second }!!
-                .first
-    }
-
-    fun playAlphabeta(board: TicTacToeBoard, symbol: TicTacToeSquare): Int {
-        val availablePositions = board.getAvailablePositions()
-        if (availablePositions.isEmpty()) {
-            throw IllegalStateException("The game is already over.")
+        val mapper = if (pruning) {
+            position: Int -> startAlphabeta(board, symbol, position)
+        } else {
+            position: Int -> startMinimax(board, symbol, position)
         }
         return availablePositions
-                .map { Pair(it, alphabeta(board.play(symbol, it), symbol, false, Int.MIN_VALUE, Int.MAX_VALUE)) }
+                .shuffled()
+                .map { Pair(it, mapper(it)) }
                 .maxBy { it.second }!!
                 .first
     }
 
-    private fun minimax(board: TicTacToeBoard, player: TicTacToeSquare, max: Boolean): Int {
+    private fun startMinimax(board: TicTacToeBoard, symbol: TicTacToeSquare, position: Int) =
+            minimax(board.play(symbol, position), symbol, maximize = false)
+
+    private fun startAlphabeta(board: TicTacToeBoard, symbol: TicTacToeSquare, position: Int) =
+            alphabeta(board.play(symbol, position), symbol, maximize = true, alpha = Int.MIN_VALUE, beta = Int.MAX_VALUE)
+
+    private fun minimax(board: TicTacToeBoard, player: TicTacToeSquare, maximize: Boolean): Int {
         // Terminal node
         val winner = board.getWinner()
         if (winner == player) {
@@ -52,10 +53,10 @@ class TicTacToeMinimaxPlayer {
             return DRAW
         }
 
-        val nextPlayer = if (max) player else opponent
-        val values = board.getAvailablePositions().map { minimax(board.play(nextPlayer, it), player, max.not()) }
+        val nextPlayer = if (maximize) player else opponent
+        val values = board.getAvailablePositions().map { minimax(board.play(nextPlayer, it), player, maximize.not()) }
 
-        return if (max) {
+        return if (maximize) {
             values.max()!!
         } else {
             values.min()!!

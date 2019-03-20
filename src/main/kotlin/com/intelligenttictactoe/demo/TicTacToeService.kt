@@ -75,7 +75,7 @@ class TicTacToeService @Autowired constructor(
 
         val currentPlayer: TicTacToeSquare = if (isXPlayerTurn) X else O
         val currentBoard = history.last()
-        return play(minimaxPlayer.play(currentBoard, currentPlayer))
+        return play(minimaxPlayer.play(currentBoard, currentPlayer, pruning = false))
     }
 
     /**
@@ -89,7 +89,7 @@ class TicTacToeService @Autowired constructor(
 
         val currentPlayer: TicTacToeSquare = if (isXPlayerTurn) X else O
         val currentBoard = history.last()
-        return play(minimaxPlayer.playAlphabeta(currentBoard, currentPlayer))
+        return play(minimaxPlayer.play(currentBoard, currentPlayer, pruning = true))
     }
 
     /**
