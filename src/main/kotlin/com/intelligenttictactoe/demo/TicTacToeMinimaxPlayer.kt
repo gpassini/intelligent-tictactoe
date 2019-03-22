@@ -37,7 +37,7 @@ class TicTacToeMinimaxPlayer {
             minimax(board.play(symbol, position), symbol, maximize = false)
 
     private fun startAlphabeta(board: TicTacToeBoard, symbol: TicTacToeSquare, position: Int) =
-            alphabeta(board.play(symbol, position), symbol, maximize = true, alpha = Int.MIN_VALUE, beta = Int.MAX_VALUE)
+            alphabeta(board.play(symbol, position), symbol, maximize = false, alpha = Int.MIN_VALUE, beta = Int.MAX_VALUE)
 
     private fun minimax(board: TicTacToeBoard, player: TicTacToeSquare, maximize: Boolean): Int {
         // Terminal node
